@@ -857,7 +857,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             PlotRenderingInfo info) {
 
         setPlot(plot);
-        if (dataset != null) {
+        if (dataset == null) {
             this.rowCount = dataset.getRowCount();
             this.columnCount = dataset.getColumnCount();
         }

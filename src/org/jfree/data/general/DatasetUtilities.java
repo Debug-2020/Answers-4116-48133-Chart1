@@ -751,12 +751,19 @@ public final class DatasetUtilities {
             for (int series = 0; series < seriesCount; series++) {
                 int itemCount = dataset.getItemCount(series);
                 for (int item = 0; item < itemCount; item++) {
+                    double value = intervalXYData.getXValue(series, item);
                     lvalue = intervalXYData.getStartXValue(series, item);
                     uvalue = intervalXYData.getEndXValue(series, item);
+                    if (!Double.isNaN(value)) {
+                        minimum = Math.min(minimum, value);
+                        maximum = Math.max(maximum, value);
+                    }
                     if (!Double.isNaN(lvalue)) {
                         minimum = Math.min(minimum, lvalue);
+                        maximum = Math.max(maximum, lvalue);
                     }
                     if (!Double.isNaN(uvalue)) {
+                        minimum = Math.min(minimum, uvalue);
                         maximum = Math.max(maximum, uvalue);
                     }
                 }
@@ -977,16 +984,27 @@ public final class DatasetUtilities {
             // handle the special case where the dataset has y-intervals that
             // we want to measure
             IntervalCategoryDataset icd = (IntervalCategoryDataset) dataset;
-            Number lvalue, uvalue;
+            Number value, lvalue, uvalue;
             for (int row = 0; row < rowCount; row++) {
                 for (int column = 0; column < columnCount; column++) {
-                    lvalue = icd.getStartValue(row, column);
-                    uvalue = icd.getEndValue(row, column);
-                    if (lvalue != null && !Double.isNaN(lvalue.doubleValue())) {
-                        minimum = Math.min(minimum, lvalue.doubleValue());
+                    value = icd.getValue(row, column);
+                    double v;
+                    if ((value != null)
+                            && !Double.isNaN(v = value.doubleValue())) {
+                        minimum = Math.min(v, minimum);
+                        maximum = Math.max(v, maximum);
                     }
-                    if (uvalue != null && !Double.isNaN(uvalue.doubleValue())) {
-                        maximum = Math.max(maximum, uvalue.doubleValue());
+                    lvalue = icd.getStartValue(row, column);
+                    if (lvalue != null
+                            && !Double.isNaN(v = lvalue.doubleValue())) {
+                        minimum = Math.min(v, minimum);
+                        maximum = Math.max(v, maximum);
+                    }
+                    uvalue = icd.getEndValue(row, column);
+                    if (uvalue != null 
+                            && !Double.isNaN(v = uvalue.doubleValue())) {
+                        minimum = Math.min(v, minimum);
+                        maximum = Math.max(v, maximum);
                     }
                 }
             }
@@ -1227,12 +1245,19 @@ public final class DatasetUtilities {
             for (int series = 0; series < seriesCount; series++) {
                 int itemCount = dataset.getItemCount(series);
                 for (int item = 0; item < itemCount; item++) {
+                    double value = ixyd.getYValue(series, item);
                     double lvalue = ixyd.getStartYValue(series, item);
                     double uvalue = ixyd.getEndYValue(series, item);
+                    if (!Double.isNaN(value)) {
+                        minimum = Math.min(minimum, value);
+                        maximum = Math.max(maximum, value);
+                    }
                     if (!Double.isNaN(lvalue)) {
                         minimum = Math.min(minimum, lvalue);
+                        maximum = Math.max(maximum, lvalue);
                     }
                     if (!Double.isNaN(uvalue)) {
+                        minimum = Math.min(minimum, uvalue);
                         maximum = Math.max(maximum, uvalue);
                     }
                 }
